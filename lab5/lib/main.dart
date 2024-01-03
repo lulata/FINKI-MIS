@@ -1,9 +1,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mis_5/calendar_widget.dart';
-import 'package:mis_5/exam_widget.dart';
-import 'package:mis_5/map_widget.dart';
+import 'calendar_widget.dart';
+import 'exam_widget.dart';
+import 'map_widget.dart';
 import 'exam.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';

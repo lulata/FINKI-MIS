@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:mis_5/google_maps.dart';
+import 'google_maps.dart';
 import 'university_location.dart';
 import 'package:latlong2/latlong.dart';
 
