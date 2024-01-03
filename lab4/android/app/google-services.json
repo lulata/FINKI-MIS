@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "749088809233",
+    "project_id": "flutter-finki",
+    "storage_bucket": "flutter-finki.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749088809233:android:4de8bee2462cc429f8ecb0",
+        "android_client_info": {
+          "package_name": "com.example.lab3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZbtKxJhUcJ1ja21a_OYaA7suYaMgOi_g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
