@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:for_testing/Components/Logo.dart';
+import 'package:dom2/Components/Logo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import '../Components/InputField.dart';
+import 'package:dom2/Components/InputField.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -12,6 +13,60 @@ class SignInForm extends StatefulWidget {
 
 class _FormExampleState extends State<SignInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _navigateToRegister() {
+    Future.delayed(Duration.zero, () {
+      Navigator.pushReplacementNamed(context, '/register');
+    });
+  }
+
+  Future<void> _authAction() async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      _showSuccessDialog(
+          "Login Successful", "You have successfully logged in!");
+      Navigator.pushReplacementNamed(context, '/');
+    } catch (e) {
+      _showErrorDialog(
+          "Authentication Error", "Error during authentication: $e");
+    }
+  }
+
+  void _showSuccessDialog(String title, String message) {
+    _scaffoldKey.currentState?.showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 2),
+    ));
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +75,21 @@ class _FormExampleState extends State<SignInForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Center(
-            child: Logo()
-          ),
-          const InputField(
+          Center(child: Logo()),
+          InputField(
             errorMessage: "Email field cannot be empty",
             isSecure: false,
             placeholder: "Email",
             pt: 20,
             pb: 12,
+            controller: _emailController,
           ),
-          const InputField(
+          InputField(
             errorMessage: "Password field cannot be empty",
             isSecure: true,
             placeholder: "Password",
             pb: 12,
+            controller: _passwordController,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
@@ -54,6 +109,7 @@ class _FormExampleState extends State<SignInForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // Process data.
+                  _authAction();
                 }
               },
               child: const Text('Login'),
@@ -69,7 +125,9 @@ class _FormExampleState extends State<SignInForm> {
                       color: Colors.black,
                     ),
                     textAlign: TextAlign.center),
-                onTap: () => {}),
+                onTap: () => {
+                      _navigateToRegister(),
+                    }),
           )
         ],
       ),

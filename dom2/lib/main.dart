@@ -1,3 +1,5 @@
+import 'package:dom2/Screens/Register.dart';
+import 'package:dom2/Screens/SignIn.dart';
 import 'package:dom2/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,32 +22,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       initialRoute: '/',
       routes: {
         '/': (context) => const MainListScreen(),
-        //   '/login': (context) => const AuthScreen(isLogin: true),
-        //   '/register': (context) => const AuthScreen(isLogin: false),
+        '/login': (context) => const SignIn(),
+        '/register': (context) => const Register(),
       },
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
     );
   }
 }
@@ -57,4 +39,52 @@ class MainListScreen extends StatefulWidget {
   MainListScreenState createState() => MainListScreenState();
 }
 
-class MainListScreenState extends State<MainListScreen> {}
+class MainListScreenState extends State<MainListScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = _auth.currentUser;
+    if (_user == null) {
+      _navigateToLogin();
+    }
+  }
+
+  void _navigateToLogin() {
+    Future.delayed(Duration.zero, () {
+      Navigator.pushReplacementNamed(context, '/login');
+    });
+  }
+
+  void _navigateToRegister() {
+    Future.delayed(Duration.zero, () {
+      Navigator.pushReplacementNamed(context, '/register');
+    });
+  }
+
+  void _signOut() async {
+    await _auth.signOut();
+    _user = null;
+    _navigateToLogin();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Welcome ${_user!.email}!"),
+            ElevatedButton(
+              onPressed: _signOut,
+              child: const Text("Sign Out"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
