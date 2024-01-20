@@ -12,6 +12,7 @@ class InputField extends StatefulWidget {
     this.pb = 0.0,
     this.pr = 0.0,
     this.pl = 0.0,
+    this.lines = 1,
   });
   final String errorMessage;
   final bool isSecure;
@@ -20,6 +21,7 @@ class InputField extends StatefulWidget {
   final double pb;
   final double pr;
   final double pl;
+  final int lines;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -39,6 +41,8 @@ class _InputFieldState extends State<InputField> {
         ),
         child: TextFormField(
       obscureText: widget.isSecure,
+      minLines: widget.lines,
+      maxLines: widget.lines,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,

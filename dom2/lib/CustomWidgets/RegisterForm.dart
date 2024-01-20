@@ -1,6 +1,5 @@
+import 'package:dom2/Components/Logo.dart';
 import 'package:flutter/material.dart';
-import 'package:for_testing/Components/Logo.dart';
-
 import '../Components/InputField.dart';
 
 class RegisterForm extends StatefulWidget {
