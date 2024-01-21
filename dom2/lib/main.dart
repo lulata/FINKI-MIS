@@ -8,6 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'Components/InputField.dart';
+import 'Components/PaperCard.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -76,11 +79,24 @@ class MainListScreenState extends State<MainListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    final TextEditingController _searchController = TextEditingController();
+
     // return const CEPaper();
     // RETURN A LIST OF JOURNALS
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Journal'),
+        title: Form(
+            key: _formKey,
+            child: InputField(
+              errorMessage: "Text cant be empty",
+              isSecure: false,
+              placeholder: "Search",
+              pb: 0,
+              lines: 1,
+              controller: _searchController,
+            )),
         actions: [
           IconButton(
             onPressed: _signOut,
@@ -97,15 +113,20 @@ class MainListScreenState extends State<MainListScreen> {
           if (snapshot.hasData) {
             final List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
             return ListView.builder(
+              padding: const EdgeInsets.only(bottom: 90),
               itemCount: documents.length,
               itemBuilder: (context, index) {
                 final Map<String, dynamic> data =
-                    documents[index].data() as Map<String, dynamic>;
-                return ListTile(
-                  title: Text(data['title']),
-                  subtitle: Text(data['text']),
-                  trailing: Text(data['rate'].toString()),
-                );
+                documents[index].data() as Map<String, dynamic>;
+                return
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: PaperCard(
+                        title: data['title'],
+                        text: data['text'],
+                        date: data['date'].toDate(),
+                        rate: data['rate']),
+                  );
               },
             );
           } else {
