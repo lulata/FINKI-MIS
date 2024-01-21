@@ -11,12 +11,6 @@ The "OnPaper" Flutter app is designed to serve as a personal diary for users, al
 •	Personal Diary: Users can create and store personal diaries where they can input their daily experiences.
 
 •	Text Entries: Users can input textual entries to express their daily experiences and thoughts.
-
-•	Privacy and Security: The app provides options for privacy and data protection.
-
-•	Organization: Entries can be organized using tags for easy searching and retrieval.
-
-•	Analytics and Statistics: Basic statistics like word count and entry count are available.
 # 2.	Getting Started
   ### Prerequisites
 •	Flutter SDK installed.
@@ -25,11 +19,11 @@ The "OnPaper" Flutter app is designed to serve as a personal diary for users, al
   ### Installation
 •	Clone the project repository:
 
-git clone https://github.com/your-username/on_paper_app.git
+git clone https://github.com/lulata/FINKI-MIS/tree/main/dom2
 
 •	Change to the project directory:
 
-cd on_paper_app
+cd dom2
 
 •	Install dependencies:
 
@@ -39,20 +33,22 @@ flutter pub get
 2.	Add Android and/or iOS app to your project and download the configuration files.
 3.	Update the google-services.json (for Android) and GoogleService-Info.plist (for iOS) in the respective platform folders.
 4.	Set up Firebase Authentication and Firestore as needed.
-# 3.	Dependencies ( treba izmena spored nasiot proekt)
-  ### Flutter Packages
-•	provider: ^6.3.4: For state management.
+# 3.	Dependencies
+cupertino_icons: ^1.0.2
+   
+firebase_core: ^2.24.2
+   
+firebase_auth: ^4.15.3
 
-•	shared_preferences: ^2.0.12: For local data persistence.
+cloud_firestore: ^4.14.0
 
-•	sqflite: ^2.0.0+3: For SQLite database operations.
+sensors: ^2.0.3
 
-  ### Firebase Packages
-•	firebase_core: ^2.7.0: For initializing Firebase.
+geolocator: ^10.1.0
 
-•	firebase_auth: ^4.4.0: For user authentication.
+permission_handler: ^11.0.0
 
-•	cloud_firestore: ^3.4.2: For Firestore database.
+google_maps_flutter: ^2.5.3
 # 4.	Usage
   ### Running the App
 •	Use the following command to run the app:
@@ -63,19 +59,28 @@ flutter run
 Implement authentication providers such as email/password, Google Sign-In, etc., using the ‘firebase_auth’ package.
   ### Firestore Database
 Utilize the ‘cloud_firestore’ package to store and retrieve data from the Firestore database.
+  ### Authentication State Persistence
+Ability to specify whether a signed in user should be indefinitely persisted until explicit sign out, cleared when the window is closed or cleared on page reload. It  persist a user's session even after the user closes the browser.
+
 # 6.	Screens and Functionality
   ### Home Screen
 •	Displays a list of diary entries retrieved from the Firestore database.
 
 •	Allows users to input new diary entries.
-# 7.	State Management (ova da se proveri kako ke se cuva)
-  ### Provider Package
-The ‘provider’ package is used for managing the app's state.
-# 8.	Web Service Integration:
-Add a section explaining how the app integrates with a web service. Include details on the purpose of the web service, any API endpoints used, and how data is exchanged between the app and the web service.
-# 9.	Custom UI Elements & Design Templates:
-•	Document the custom UI elements used in your app. Provide explanations for the purpose and functionality of each custom UI component.
+# 8.	Custom UI Elements & Design Templates
+  ### MVC Architecture
+The "OnPaper" Flutter app follows the Model-View-Controller (MVC) architectural pattern. This separation of concerns enhances maintainability and scalability. Key components include:
 
-•	Detail the three design templates applied in your app. Include screenshots or descriptions of how each template is implemented and where they are used within the app.
-# 10.	Sensor, Camera, or Location Services:
-•	If your app utilizes sensors, camera functionalities, or location services, document how these features are integrated. Provide information on the purpose of each sensor or service and how users can interact with them.
+•	Model (Data Layer): Manages data and business logic. For example, the diary entry model defines the structure of each entry.
+
+•	View (Presentation Layer): Handles UI elements and user interaction. Custom UI widgets, such as a stylized entry form, are part of the view.
+
+•	Controller (Application Logic): Manages the flow of data between the model and view. Controllers, like the DiaryController, handle user input and update the model accordingly.
+  ### Singleton Components
+•	Certain components in the app are implemented as singletons, ensuring a single instance is shared throughout the application.
+
+# 9.	Sensors and Location Services
+•	Sensors: Accelerometer, UserAccelerometer and Gyroscope.
+
+•	Location Services
+
