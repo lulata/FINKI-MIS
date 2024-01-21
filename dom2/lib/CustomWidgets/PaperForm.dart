@@ -13,7 +13,11 @@ class PaperForm extends StatefulWidget {
 class _PaperFormState extends State<PaperForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  int? rateYourDay = null;
+  int? rateYourDay;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -37,26 +41,29 @@ class _PaperFormState extends State<PaperForm> {
             ),
           ),
       ),
-          const InputField(
+           InputField(
             errorMessage: "Email field cannot be empty",
             isSecure: false,
             placeholder: "Title",
             pt: 20,
             pb: 12,
+             controller: _titleController,
           ),
-          const InputField(
+           InputField(
             errorMessage: "Text cant be empty",
             isSecure: false,
             placeholder: "Text",
             pb: 12,
             lines: 20,
+            controller: _textController,
           ),
           CalendarDatePicker(
-              initialDate: DateTime.now(),
+              initialDate: _selectedDate,
               firstDate: DateTime.parse("2010-02-27"),
               lastDate: DateTime.parse("2040-02-27"),
               onDateChanged: (DateTime date) => {
-                // store data
+                setState(() => _selectedDate = date
+                )
               }),
           const Text("Rate your day"),
           Row(
