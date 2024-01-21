@@ -1,14 +1,17 @@
+import 'dart:collection';
+
 import 'package:dom2/CustomWidgets/PaperForm.dart';
 import 'package:dom2/Screens/CEPaper.dart';
 import 'package:dom2/Screens/Register.dart';
+import 'package:dom2/Screens/Sensors.dart';
 import 'package:dom2/Screens/SignIn.dart';
+import 'package:dom2/Screens/Map.dart';
 import 'package:dom2/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'Components/InputField.dart';
 import 'Components/PaperCard.dart';
 
 Future<void> main() async {
@@ -35,6 +38,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const Register(),
         '/add': (context) => CEPaper(),
         '/edit': (context) => CEPaper(),
+        '/sensors': (context) => Sensors(),
+        '/map': (context) => MapView(),
       },
     );
   }
@@ -89,6 +94,18 @@ class MainListScreenState extends State<MainListScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/map');
+            },
+            icon: const Icon(Icons.map),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/sensors');
+            },
+            icon: const Icon(Icons.sensors),
+          ),
           IconButton(
             onPressed: () {
               Navigator.pushReplacementNamed(context, '/add');
