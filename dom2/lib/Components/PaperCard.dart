@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dom2/Screens/CEPaper.dart';
 import 'package:flutter/material.dart';
 
 class PaperCard extends StatefulWidget {
-  const PaperCard(
-      {super.key,
-      this.path = 'assets/Images/logo.png',
-      required this.title,
-      required this.text,
-      required this.date,
-      required this.rate});
+  const PaperCard({
+    super.key,
+    this.path = 'assets/Images/logo.png',
+    required this.title,
+    required this.text,
+    required this.date,
+    required this.rate,
+    required this.id,
+  });
 
   final String path;
   final String text;
   final String title;
   final DateTime date;
+  final String id;
   final int rate;
 
   @override
@@ -21,10 +25,16 @@ class PaperCard extends StatefulWidget {
 }
 
 class _PaperCardState extends State<PaperCard> {
+  void refreshPage() {
+    setState(() {
+      Navigator.pushReplacementNamed(context, '/');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(20),
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
@@ -76,33 +86,69 @@ class _PaperCardState extends State<PaperCard> {
                   InkWell(
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.40,
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                        decoration:
-                        BoxDecoration(
-                            border: Border.all(color: Colors.black,width: 1)
-                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1)),
                         child: const Text('Edit',
                             style: TextStyle(
                               color: Colors.black,
                             ),
                             textAlign: TextAlign.center),
                       ),
-                      onTap: () => {}),
+                      onTap: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CEPaper(
+                                        editData: {
+                                          'title': widget.title,
+                                          'text': widget.text,
+                                          'date': widget.date,
+                                          'rate': widget.rate,
+                                          'id': widget.id,
+                                        },
+                                      )),
+                            )
+                          }),
                   InkWell(
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.40,
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                        decoration:
-                        BoxDecoration(
-                            border: Border.all(color: Colors.red,width: 1)
-                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red, width: 1)),
                         child: const Text('Delete',
                             style: TextStyle(
                               color: Colors.red,
                             ),
                             textAlign: TextAlign.center),
                       ),
-                      onTap: () => {}),
+                      onTap: () => {
+                            FirebaseFirestore.instance
+                                .collection('journals')
+                                .doc(widget.id)
+                                .delete()
+                                .then(
+                                  (value) => {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Journal successfully deleted'),
+                                      ),
+                                    ),
+                                  },
+                                )
+                                .catchError((error) => {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'Error deleting journal. Please try again.'),
+                                        ),
+                                      )
+                                    })
+                          }),
                 ],
               ),
             ),

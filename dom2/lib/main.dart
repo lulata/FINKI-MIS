@@ -33,6 +33,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MainListScreen(),
         '/login': (context) => const SignIn(),
         '/register': (context) => const Register(),
+        '/add': (context) => CEPaper(),
+        '/edit': (context) => CEPaper(),
       },
     );
   }
@@ -84,20 +86,15 @@ class MainListScreenState extends State<MainListScreen> {
     final TextEditingController _searchController = TextEditingController();
 
     // return const CEPaper();
-    // RETURN A LIST OF JOURNALS
     return Scaffold(
       appBar: AppBar(
-        title: Form(
-            key: _formKey,
-            child: InputField(
-              errorMessage: "Text cant be empty",
-              isSecure: false,
-              placeholder: "Search",
-              pb: 0,
-              lines: 1,
-              controller: _searchController,
-            )),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/add');
+            },
+            icon: const Icon(Icons.add),
+          ),
           IconButton(
             onPressed: _signOut,
             icon: const Icon(Icons.logout),
@@ -117,16 +114,17 @@ class MainListScreenState extends State<MainListScreen> {
               itemCount: documents.length,
               itemBuilder: (context, index) {
                 final Map<String, dynamic> data =
-                documents[index].data() as Map<String, dynamic>;
-                return
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: PaperCard(
-                        title: data['title'],
-                        text: data['text'],
-                        date: data['date'].toDate(),
-                        rate: data['rate']),
-                  );
+                    documents[index].data() as Map<String, dynamic>;
+                return Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: PaperCard(
+                    title: data['title'],
+                    text: data['text'],
+                    date: data['date'].toDate(),
+                    rate: data['rate'],
+                    id: documents[index].id,
+                  ),
+                );
               },
             );
           } else {
@@ -135,17 +133,6 @@ class MainListScreenState extends State<MainListScreen> {
             );
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CEPaper(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

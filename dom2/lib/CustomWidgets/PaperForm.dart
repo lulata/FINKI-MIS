@@ -6,7 +6,9 @@ import 'package:dom2/Components/InputField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaperForm extends StatefulWidget {
-  const PaperForm({super.key});
+  final Map<String, dynamic>? editData;
+
+  const PaperForm({Key? key, this.editData}) : super(key: key);
 
   @override
   State<PaperForm> createState() => _PaperFormState();
@@ -15,6 +17,20 @@ class PaperForm extends StatefulWidget {
 class _PaperFormState extends State<PaperForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    print(widget.editData);
+    print(widget);
+
+    if (widget.editData != null) {
+      _titleController.text = widget.editData!['title'];
+      _textController.text = widget.editData!['text'];
+      _selectedDate = widget.editData!['date'];
+      rateYourDay = widget.editData!['rate'];
+    }
+  }
+
   int? rateYourDay;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
@@ -22,13 +38,26 @@ class _PaperFormState extends State<PaperForm> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void saveData() {
-    FirebaseFirestore.instance.collection('journals').add({
-      'title': _titleController.text,
-      'text': _textController.text,
-      'date': _selectedDate,
-      'rate': rateYourDay,
-      'userID': _auth.currentUser!.uid,
-    });
+    if (widget.editData == null) {
+      FirebaseFirestore.instance.collection('journals').add({
+        'title': _titleController.text,
+        'text': _textController.text,
+        'date': _selectedDate,
+        'rate': rateYourDay,
+        'userID': _auth.currentUser!.uid,
+      });
+    } else {
+      FirebaseFirestore.instance
+          .collection('journals')
+          .doc(widget.editData!['id'])
+          .update({
+        'title': _titleController.text,
+        'text': _textController.text,
+        'date': _selectedDate,
+        'rate': rateYourDay,
+        'userID': _auth.currentUser!.uid,
+      });
+    }
     Navigator.pushReplacementNamed(context, '/');
   }
 
@@ -128,7 +157,7 @@ class _PaperFormState extends State<PaperForm> {
                   saveData();
                 }
               },
-              child: const Text('Save'),
+              child: Text(widget.editData == null ? 'Add' : 'Update'),
             ),
           ),
         ],
