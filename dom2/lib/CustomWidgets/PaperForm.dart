@@ -1,7 +1,9 @@
 import 'package:dom2/Components/Logo.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import '../Components/InputField.dart';
+import 'package:dom2/Components/InputField.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaperForm extends StatefulWidget {
   const PaperForm({super.key});
@@ -17,6 +19,18 @@ class _PaperFormState extends State<PaperForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void saveData() {
+    FirebaseFirestore.instance.collection('journals').add({
+      'title': _titleController.text,
+      'text': _textController.text,
+      'date': _selectedDate,
+      'rate': rateYourDay,
+      'userID': _auth.currentUser!.uid,
+    });
+    Navigator.pushReplacementNamed(context, '/');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,30 +40,25 @@ class _PaperFormState extends State<PaperForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-          decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 1,
-                  color: Colors.black
-                )
-              )
-            ),
+            decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(width: 1, color: Colors.black))),
             margin: const EdgeInsets.only(bottom: 20),
-          child: const Center(
-            child: Logo(
-              path: 'assets/Images/logo2.png',
+            child: const Center(
+              child: Logo(
+                path: 'assets/Images/logo2.png',
+              ),
             ),
           ),
-      ),
-           InputField(
+          InputField(
             errorMessage: "Email field cannot be empty",
             isSecure: false,
             placeholder: "Title",
             pt: 20,
             pb: 12,
-             controller: _titleController,
+            controller: _titleController,
           ),
-           InputField(
+          InputField(
             errorMessage: "Text cant be empty",
             isSecure: false,
             placeholder: "Text",
@@ -61,10 +70,8 @@ class _PaperFormState extends State<PaperForm> {
               initialDate: _selectedDate,
               firstDate: DateTime.parse("2010-02-27"),
               lastDate: DateTime.parse("2040-02-27"),
-              onDateChanged: (DateTime date) => {
-                setState(() => _selectedDate = date
-                )
-              }),
+              onDateChanged: (DateTime date) =>
+                  {setState(() => _selectedDate = date)}),
           const Text("Rate your day"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,37 +79,31 @@ class _PaperFormState extends State<PaperForm> {
               Radio(
                 value: 0,
                 groupValue: rateYourDay,
-                onChanged: (val) => {
-                  setState(() => rateYourDay = val)
-                },
+                onChanged: (val) => {setState(() => rateYourDay = val)},
               ),
               const Text(
                 'Bad',
-                style:  TextStyle(fontSize: 16.0),
+                style: TextStyle(fontSize: 16.0),
               ),
               Radio(
                 value: 1,
                 groupValue: rateYourDay,
-                onChanged: (val) => {
-                  setState(() => rateYourDay = val)
-                },
+                onChanged: (val) => {setState(() => rateYourDay = val)},
               ),
-               const Text(
+              const Text(
                 'Basic',
-                style:  TextStyle(
+                style: TextStyle(
                   fontSize: 16.0,
                 ),
               ),
-               Radio(
+              Radio(
                 value: 2,
                 groupValue: rateYourDay,
-                onChanged: (val) => {
-                  setState(() => rateYourDay = val)
-                },
+                onChanged: (val) => {setState(() => rateYourDay = val)},
               ),
-               const Text(
+              const Text(
                 'Great',
-                style:  TextStyle(fontSize: 16.0),
+                style: TextStyle(fontSize: 16.0),
               ),
             ],
           ),
@@ -124,6 +125,7 @@ class _PaperFormState extends State<PaperForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // Process data.
+                  saveData();
                 }
               },
               child: const Text('Save'),

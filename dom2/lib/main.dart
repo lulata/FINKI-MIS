@@ -1,3 +1,4 @@
+import 'package:dom2/CustomWidgets/PaperForm.dart';
 import 'package:dom2/Screens/CEPaper.dart';
 import 'package:dom2/Screens/Register.dart';
 import 'package:dom2/Screens/SignIn.dart';
@@ -5,6 +6,7 @@ import 'package:dom2/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,19 +76,6 @@ class MainListScreenState extends State<MainListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Welcome ${_user?.email}!"),
-            ElevatedButton(
-              onPressed: _signOut,
-              child: const Text("Sign Out"),
-            ),
-          ],
-        ),
-      ),
-    );
+    return const CEPaper();
   }
 }
