@@ -17,8 +17,11 @@ class _CEPaperState extends State<CEPaper> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          leading: BackButton(
-            color: Colors.black,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
           ),
         ),
         backgroundColor: Colors.white,

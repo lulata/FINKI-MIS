@@ -19,21 +19,27 @@ class _SensorsState extends State<Sensors> {
 
     // Register listeners for sensor events
     accelerometerEvents.listen((AccelerometerEvent event) {
-      setState(() {
-        _accelerometerValues = <double>[event.x, event.y, event.z];
-      });
+      if(mounted) {
+        setState(() {
+          _accelerometerValues = <double>[event.x, event.y, event.z];
+        });
+      }
     });
 
     userAccelerometerEvents.listen((UserAccelerometerEvent event) {
-      setState(() {
-        _userAccelerometerValues = <double>[event.x, event.y, event.z];
-      });
+      if(mounted) {
+        setState(() {
+          _userAccelerometerValues = <double>[event.x, event.y, event.z];
+        });
+      }
     });
 
     gyroscopeEvents.listen((GyroscopeEvent event) {
-      setState(() {
-        _gyroscopeValues = <double>[event.x, event.y, event.z];
-      });
+      if(mounted) {
+        setState(() {
+          _gyroscopeValues = <double>[event.x, event.y, event.z];
+        });
+      }
     });
   }
 
@@ -44,7 +50,7 @@ class _SensorsState extends State<Sensors> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, '/');
           },
         ),
       ),
