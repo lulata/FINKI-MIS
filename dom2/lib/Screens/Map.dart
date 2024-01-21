@@ -18,22 +18,11 @@ class _MapState extends State<MapView> {
     super.initState();
     _getLocationPermission();
   }
-  //
-  // Future<void> _getLocationPermission() async {
-  //   LocationPermission permission = await Geolocator.requestPermission();
-  //   if (permission == LocationPermission.denied ||
-  //       permission == LocationPermission.deniedForever) {
-  //     // Handle denied or permanently denied permission
-  //     print('Location permission denied.');
-  //   } else {
-  //     // Permission granted, you can now get the location
-  //     print('Location permission granted.');
-  //   }
-  // }
 
   Future<void> _getLocationPermission() async {
     var status = await Permission.location.request();
-    if (status == PermissionStatus.denied || status == PermissionStatus.permanentlyDenied) {
+    if (status == PermissionStatus.denied ||
+        status == PermissionStatus.permanentlyDenied) {
       // Handle denied or permanently denied permission
       print('Location permission denied.');
     } else {
@@ -46,10 +35,11 @@ class _MapState extends State<MapView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: BackButton(
-            color: Colors.black,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         body: Column(
