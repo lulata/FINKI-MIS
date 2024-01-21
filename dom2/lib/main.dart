@@ -76,6 +76,56 @@ class MainListScreenState extends State<MainListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const CEPaper();
+    // return const CEPaper();
+    // RETURN A LIST OF JOURNALS
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Journal'),
+        actions: [
+          IconButton(
+            onPressed: _signOut,
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('journals')
+            .where('userID', isEqualTo: _user?.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: documents.length,
+              itemBuilder: (context, index) {
+                final Map<String, dynamic> data =
+                    documents[index].data() as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(data['title']),
+                  subtitle: Text(data['text']),
+                  trailing: Text(data['rate'].toString()),
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CEPaper(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
