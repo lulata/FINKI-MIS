@@ -67,7 +67,7 @@ Ability to specify whether a signed in user should be indefinitely persisted unt
 •	Displays a list of diary entries retrieved from the Firestore database.
 
 •	Allows users to input new diary entries.
-# 8.	Custom UI Elements & Design Templates
+# 7.	Custom UI Elements & Design Templates
   ### MVC Architecture
 The "OnPaper" Flutter app follows the Model-View-Controller (MVC) architectural pattern. This separation of concerns enhances maintainability and scalability. Key components include:
 
@@ -79,7 +79,7 @@ The "OnPaper" Flutter app follows the Model-View-Controller (MVC) architectural 
   ### Singleton Components
 •	Certain components in the app are implemented as singletons, ensuring a single instance is shared throughout the application.
 
-# 9.	Sensors and Location Services
+# 8.	Sensors and Location Services
 •	Sensors: Accelerometer, UserAccelerometer and Gyroscope.
 
 •	Location Services
